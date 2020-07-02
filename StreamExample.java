@@ -1,3 +1,5 @@
+package java8;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,12 +35,13 @@ import java.lang.*;
 				.collect(Collectors.toCollection(ArrayList::new)); //constructor reference
 
 		// sequential stream - nothing to combine
+		//(x,y) -> x.append(y) can be replaced by StringBuilder::append
 		StringBuilder result = vowels.stream().collect(StringBuilder::new, (x, y) -> x.append(y),
 				(a, b) -> a.append(",").append(b));
 		System.out.println(result.toString());
 
 		// parallel stream - combiner is combining partial results
-		StringBuilder result1 = vowels.parallelStream().collect(StringBuilder::new, (x, y) -> x.append(y),
+		StringBuilder result1 = vowels.parallelStream().collect(StringBuilder::new, StringBuilder::append,
 				(a, b) -> a.append(",").append(b));
 		System.out.println(result1.toString());
 
@@ -61,7 +64,7 @@ import java.lang.*;
 
 		//collect() to map
 		Map<Integer, String> mapOddNumbers = numbers.parallelStream().filter(x -> x % 2 != 0)
-				.collect(Collectors.toMap(Function.identity(), x -> String.valueOf(x)));
+				.collect(Collectors.toMap(Function.identity(), String::valueOf));
 		System.out.println(mapOddNumbers);
 
 		System.out.println("IS 97 PRIME?" + isPrime(97));
